@@ -2,7 +2,7 @@ type TTask = {
     id: number;
     title: string;
     description: string;
-    favorite:boolean;
+    favorite: boolean;
 };
 
 export default TTask;

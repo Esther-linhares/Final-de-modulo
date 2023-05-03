@@ -14,17 +14,20 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Divider from '@mui/material/Divider';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ModalInputs from '../components/ModalInputs';
-import { useAppSelector } from '../store/hooks';
-import { SelectAllTasks } from '../store/modules/TasksSlice';
+import ModalInputs from '../components/ModalAdd';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { SelectAllTasks, editTask } from '../store/modules/TasksSlice';
+
 
 
 
 const Notes: React.FC = () => {
   const [favorite, setFavorite] = useState(false);
   const [openAdd, setOpenAdd] = React.useState(false);
-  const [listTaks, setListTasks] = useAppSelector(SelectAllTasks);
+  const listTaks = useAppSelector(SelectAllTasks);
+  const dispatch = useAppDispatch();
 
+  const listFavorites = listTaks.filter((item) => item.favorite === true);
 
   function page(){
     setFavorite(!favorite);
@@ -44,6 +47,17 @@ const Notes: React.FC = () => {
     setOpenAdd(true);
   };
 
+  const taskFavorite = (id: number) => {
+    const task = listTaks.find((item) => item.id === id);
+    if (task) {
+      dispatch(
+        editTask({
+          ...task, favorite: !task.favorite
+        }),
+      );
+    }
+  };
+
   
   return (
     <Grid container height={'100vh'} display= 'flex' justifyContent='center'>
@@ -51,61 +65,65 @@ const Notes: React.FC = () => {
         <Box height='100%' paddingX={4} bgcolor='#f6f6f6'>
           <Typography paddingY={2} variant='h4'>{favorite? 'Recados Favoritos' : 'Todos os recados'}</Typography>
 
-          <ListItem secondaryAction={
-            <>
-              <IconButton
-                edge="end"
-                aria-label="edit"
-                sx={{ m: 1 }}
-              >
-                <ModeEditIcon />
-              </IconButton>
-              <IconButton edge="end" aria-label="delete">
-                <DeleteIcon/>
-              </IconButton>
-            </>
-          }>
-            <ListItemAvatar>
-              <IconButton>
-                <FavoriteIcon  color='primary' />
-              </IconButton>
-            </ListItemAvatar>
-            <ListItemText
-              primary={'favorito'}
-              secondary={'descrição'}
-            />
-          </ListItem>
-          <Divider />
-          <ListItem
-            secondaryAction={
-              <>
-                <IconButton
-                  edge="end"
-                  aria-label="edit"
-                  sx={{ m: 1 }}
-                >
-                  <ModeEditIcon />
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  /* onClick={openRemoveModal} */
-                  aria-label="delete"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </>
-            }
-          >
-            <ListItemAvatar>
-              <IconButton>
-                <FavoriteBorderIcon  color='primary'/>
-              </IconButton>
-            </ListItemAvatar>
-            <ListItemText
-              primary={'não favorito'}
-              secondary={'descrição'}
-            />
-          </ListItem>
+
+          <Grid item>
+            {favorite? listFavorites.map((Task) => (
+              <Grid item key={Task?.id}>
+                <Divider />
+                <ListItem secondaryAction={
+                  <>
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      sx={{ m: 1 }}
+                    >
+                      <ModeEditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon/>
+                    </IconButton>
+                  </>
+                }>
+                  <ListItemAvatar>
+                    <IconButton onClick={() => taskFavorite(Task.id)}>
+                      <FavoriteIcon  color='primary' />
+                    </IconButton>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={Task.title}
+                    secondary={Task.description}
+                  />
+                </ListItem>
+              </Grid>
+            ))  : listTaks.map((Task) => (
+              <Grid item key={Task?.id}>
+                <Divider />
+                <ListItem secondaryAction={
+                  <>
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      sx={{ m: 1 }}
+                    >
+                      <ModeEditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon/>
+                    </IconButton>
+                  </>
+                }>
+                  <ListItemAvatar>
+                    <IconButton onClick={() => taskFavorite(Task.id)}>
+                      {Task.favorite?  <><FavoriteIcon color='primary'/></> :  <><FavoriteBorderIcon  color='primary'/></> }
+                    </IconButton>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={Task.title}
+                    secondary={Task.description}
+                  />
+                </ListItem>
+              </Grid>))}
+          </Grid>
         </Box>
         
       </Grid>
@@ -136,8 +154,6 @@ const Notes: React.FC = () => {
         <AddIcon />
       </Fab>
       <ModalInputs
-        title="Adicionar"
-        description="Escreva o recado aqui bçabçla"
         openModal={openAdd}
         actionConfirm={addNotes}
         actionCancel={handleClose}

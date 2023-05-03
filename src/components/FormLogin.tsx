@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { addUser, selectAllUsers } from '../store/modules/UsersSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { loggedUserSlice, setuserLogged } from '../store/modules/UserLoggedSlice';
+import { setUserLogged } from '../store/modules/UserLoggedSlice';
 
 interface FormProps {
 	mode: 'signin' | 'signup';
@@ -78,7 +78,7 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
         return;
       }
 
-      dispatch(setuserLogged({email: userExist.email, password: userExist.password, tasks: userExist.tasks}));
+      dispatch(setUserLogged({email: userExist.email, password: userExist.password, tasks: userExist.tasks}));
       navigate('/notes');
     } else {
       const newUser = {
