@@ -16,7 +16,7 @@ import Divider from '@mui/material/Divider';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ModalInputs from '../components/ModalAdd';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { SelectAllTasks, editTask } from '../store/modules/TasksSlice';
+import { updateTask } from '../store/modules/UserLoggedSlice';
 
 
 
@@ -24,7 +24,7 @@ import { SelectAllTasks, editTask } from '../store/modules/TasksSlice';
 const Notes: React.FC = () => {
   const [favorite, setFavorite] = useState(false);
   const [openAdd, setOpenAdd] = React.useState(false);
-  const listTaks = useAppSelector(SelectAllTasks);
+  const listTaks = useAppSelector(state => state.userLogged.userLogged.tasks);
   const dispatch = useAppDispatch();
 
   const listFavorites = listTaks.filter((item) => item.favorite === true);
@@ -51,7 +51,7 @@ const Notes: React.FC = () => {
     const task = listTaks.find((item) => item.id === id);
     if (task) {
       dispatch(
-        editTask({
+        updateTask({
           ...task, favorite: !task.favorite
         }),
       );

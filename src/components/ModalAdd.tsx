@@ -9,7 +9,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/system';
 import TTask from '../types/TypeTask';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { addTask } from '../store/modules/TasksSlice';
 import { updateUser } from '../store/modules/UsersSlice';
 import { addNewTask } from '../store/modules/UserLoggedSlice';
 import { title } from 'process';
