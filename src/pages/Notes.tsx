@@ -17,6 +17,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ModalInputs from '../components/ModalAdd';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { updateTask } from '../store/modules/UserLoggedSlice';
+import TTask from '../types/TypeTask';
+import ModalEdit from '../components/ModalEdit';
 
 
 
@@ -26,8 +28,9 @@ const Notes: React.FC = () => {
   const [openAdd, setOpenAdd] = React.useState(false);
   const listTaks = useAppSelector(state => state.userLogged.userLogged.tasks);
   const dispatch = useAppDispatch();
-
+  const [task, setTask] = useState({} as TTask);
   const listFavorites = listTaks.filter((item) => item.favorite === true);
+  const [openEdit, setOpenEdit] = React.useState(false);
 
   function page(){
     setFavorite(!favorite);
@@ -38,13 +41,20 @@ const Notes: React.FC = () => {
 
   const handleClose = () => {
     setOpenAdd(false);
+    setOpenEdit(false);
   };
-  const addNotes = () => {
-    console.log('funcionando');
+  const actionConfirm = () => {
     setOpenAdd(false);
+    setOpenEdit(false);
   };
   const openModalImput = () => {
     setOpenAdd(true);
+  };
+
+  const openModalEdit = (task: TTask) => {
+    setTask(task);
+    console.log('bombou');
+    setOpenEdit(true);
   };
 
   const taskFavorite = (id: number) => {
@@ -64,8 +74,6 @@ const Notes: React.FC = () => {
       <Grid item sm={12} height='100%'>
         <Box height='100%' paddingX={4} bgcolor='#f6f6f6'>
           <Typography paddingY={2} variant='h4'>{favorite? 'Recados Favoritos' : 'Todos os recados'}</Typography>
-
-
           <Grid item>
             {favorite? listFavorites.map((Task) => (
               <Grid item key={Task?.id}>
@@ -76,7 +84,7 @@ const Notes: React.FC = () => {
                       edge="end"
                       aria-label="edit"
                       sx={{ m: 1 }}
-                    >
+                      onClick={() => openModalEdit(Task)}>
                       <ModeEditIcon />
                     </IconButton>
                     <IconButton edge="end" aria-label="delete">
@@ -104,6 +112,7 @@ const Notes: React.FC = () => {
                       edge="end"
                       aria-label="edit"
                       sx={{ m: 1 }}
+                      onClick={() => openModalEdit(Task)}
                     >
                       <ModeEditIcon />
                     </IconButton>
@@ -155,9 +164,15 @@ const Notes: React.FC = () => {
       </Fab>
       <ModalInputs
         openModal={openAdd}
-        actionConfirm={addNotes}
+        actionConfirm={actionConfirm}
         actionCancel={handleClose}
       />
+      {openEdit && ( <ModalEdit 
+        taskEdit={task}
+        openModal={openEdit}
+        actionCancel={handleClose}
+        actionConfirm={actionConfirm}
+      ></ModalEdit>)}
     </Grid>
   );
 };
