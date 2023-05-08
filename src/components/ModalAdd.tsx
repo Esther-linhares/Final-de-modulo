@@ -12,8 +12,6 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { updateUser } from '../store/modules/UsersSlice';
 import { addNewTask } from '../store/modules/UserLoggedSlice';
 
-
-
 interface ModalInputsProps {
     openModal: boolean;
     actionConfirm: () => void;
