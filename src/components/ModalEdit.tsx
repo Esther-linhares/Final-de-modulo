@@ -22,12 +22,9 @@ interface ModalEditProps {
 }
 
 const ModalEdit: React.FC<ModalEditProps> = ({ taskEdit, openModal, actionCancel, actionConfirm }) => {
-  /* const [descriptionTask, setDescriptionTask] = useState<string>('');
-  const [titleTask, setTitleTask] = useState<string>('');
-   */const dispatch = useAppDispatch();
+
+  const dispatch = useAppDispatch();
   const[editTask, setEditTask] = React.useState(taskEdit);
-
-
   const userLogged = useAppSelector(state => state.userLogged.userLogged);
   const listTasks = useAppSelector(state => state.userLogged.userLogged.tasks);
 

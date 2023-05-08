@@ -9,7 +9,7 @@ interface HeaderFormProps {
 const HeaderForm: React.FC<HeaderFormProps> = ({ title,color}) => {
   return (
     <>
-      <Typography color={color} variant="h4">{title} </Typography>
+      <Typography marginTop={6} color={color} variant="h4">{title} </Typography>
     </>
   );
 };

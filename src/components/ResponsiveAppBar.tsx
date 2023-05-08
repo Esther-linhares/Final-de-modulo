@@ -44,7 +44,7 @@ const ResponsiveAppBar: React.FC = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#322e33' }}>
+    <AppBar position="static" sx={{ backgroundColor: 'primary' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -76,11 +76,11 @@ const ResponsiveAppBar: React.FC = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {routes.map((page) => (
-                <MenuItem key={page.url} onClick={() => handleCloseNavMenu(page.url)}>
-                  <Typography textAlign="center">{page.label}</Typography>
-                </MenuItem>
-              ))}
+             
+              <MenuItem onClick={() => handleCloseNavMenu('/notes')}>
+                <Typography textAlign="center">Recados</Typography>
+              </MenuItem>
+             
             </Menu>
           </Box>
 
@@ -109,7 +109,7 @@ const ResponsiveAppBar: React.FC = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar sx={{ color: '#9dd07b', bgcolor: '#65864f' }} /* alt={userLogged.toUpperCase()} */ src="/static/images/avatar/2.jpg" />
+                <Avatar sx={{ color: '#638566', bgcolor: '#acc69b' }} /* alt={userLogged.toUpperCase()} */ src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

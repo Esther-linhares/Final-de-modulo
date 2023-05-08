@@ -13,7 +13,7 @@ const SignUp: React.FC = () => {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random)',
+          backgroundImage: 'url(/assets/img/notesImage.png)',
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repete',
@@ -31,19 +31,6 @@ const SignUp: React.FC = () => {
           <HeaderForm title="Cadastre-se" color={'primary'} />
 
           <Form textButton="Criar Conta" mode="signup" />
-
-          <Typography variant="body2" color="text.secondary" marginTop={5}>
-                        Copyright &copy;{' '}
-            <Link
-              color="inherit"
-              href="www.growdev.com.br"
-              target="_blank"
-              variant="body2"
-            >
-                            Your Website
-            </Link>{' '}
-                        2023.
-          </Typography>
         </Box>
       </Grid>
     </Grid>

@@ -1,5 +1,5 @@
 
-import { Grid, Box, Typography, Link } from '@mui/material';
+import { Grid, Box, } from '@mui/material';
 import React from 'react';
 import Form from '../components/FormLogin';
 import HeaderForm from '../components/HeaderForm';
@@ -10,12 +10,12 @@ const SignIn: React.FC = () => {
   return (
     <Grid container height="100vh">
       <Grid
-        item
+        item 
         xs={false}
         sm={4}
         md={7}
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random)',
+          backgroundImage: 'url(/assets/img/notesImage.png)',
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repete',
@@ -33,19 +33,6 @@ const SignIn: React.FC = () => {
           <HeaderForm title="Acessar App" color={'primary'} />
 
           <Form textButton="Logar" mode="signin" />
-
-          <Typography variant="body2" color="text.secondary" marginTop={5}>
-                        Copyright &copy;{' '}
-            <Link
-              color="inherit"
-              href="www.growdev.com.br"
-              target="_blank"
-              variant="body2"
-            >
-                            Your Website
-            </Link>{' '}
-                        2023.
-          </Typography>
         </Box>
       </Grid>
     </Grid>

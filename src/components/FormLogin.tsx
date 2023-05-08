@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { addUser, selectAllUsers } from '../store/modules/UsersSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setUserLogged } from '../store/modules/UserLoggedSlice';
+import AlertComponent from './Alert';
 
 interface FormProps {
 	mode: 'signin' | 'signup';
@@ -27,6 +28,7 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
   const users = useAppSelector(selectAllUsers);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState({ success: false, text: '', display: 'none' });
 
   useEffect(() => {
     if (mode === 'signup') {
@@ -74,7 +76,14 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
 					value.password === user.password
       );
       if (!userExist) {
-        alert('Usuário ou senha incorretos');
+        setShowAlert({
+          display: 'show',
+          success: false,
+          text: 'Usuário ou senha incorretos!',
+        });
+        setTimeout(() => {
+          setShowAlert({ display: 'none', success: true, text: '' });
+        }, 1000);
         return;
       }
 
@@ -91,89 +100,108 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
         (value) => value.email === newUser.email
       );
       if (retorno) {
-        alert('E-mail já cadastrado');
+        setShowAlert({
+          display: 'show',
+          success: false,
+          text: 'Email já cadastrado!',
+        });
+        setTimeout(() => {
+          setShowAlert({ display: 'none', success: true, text: '' });
+        }, 1000);
         return;
       }
+
+      setShowAlert({
+        display: 'show',
+        success: true,
+        text: 'Conta criada com sucesso!',
+      });
+      setTimeout(() => {
+        setShowAlert({ display: 'none', success: true, text: '' });
+      }, 1000);
       dispatch(addUser(newUser));
     }
   }
   return (
-    <Box component="form" marginTop={1} onSubmit={(ev) => handleSubmit(ev)}>
-      <TextField
-        error={errorEmail}
-        helperText={errorEmail ? 'E-mail inválido' : ''}
-        value={email}
-        onChange={(ev) => setEmail(ev.target.value)}
-        margin="normal"
-        variant="outlined"
-        type="email"
-        required
-        id="email"
-        label="E-mail"
-        fullWidth
-      />
-      <TextField
-        error={errorPassword}
-        helperText={
-          errorPassword
-            ? 'Senha deve conter ao menos 6 caracteres'
-            : ''
-        }
-        value={password}
-        onChange={(ev) => setPassword(ev.target.value)}
-        margin="normal"
-        variant="outlined"
-        type="password"
-        required
-        id="password"
-        label="Senha"
-        fullWidth
-      />
-
-      {mode === 'signup' ? (
+    <Box>
+      <AlertComponent success={showAlert.success} text={showAlert.text} display={showAlert.display} />
+      <Box component="form" marginTop={3} onSubmit={(ev) => handleSubmit(ev)}>
         <TextField
-          error={errorRepassword}
+          error={errorEmail}
+          helperText={errorEmail ? 'E-mail inválido' : ''}
+          value={email}
+          onChange={(ev) => setEmail(ev.target.value)}
+          margin="normal"
+          variant="outlined"
+          type="email"
+          required
+          id="email"
+          label="E-mail"
+          fullWidth
+        />
+        <TextField
+          error={errorPassword}
           helperText={
-            errorRepassword ? 'As senhas não coincidem' : ''
+            errorPassword
+              ? 'Senha deve conter ao menos 6 caracteres'
+              : ''
           }
-          value={repassword}
-          onChange={(ev) => setRepassword(ev.target.value)}
+          value={password}
+          onChange={(ev) => setPassword(ev.target.value)}
           margin="normal"
           variant="outlined"
           type="password"
           required
-          id="repassword"
-          label="Repetir Senha"
+          id="password"
+          label="Senha"
           fullWidth
         />
-      ) : ''}
 
-      <Button
-        disabled={disabled}
-        type="submit"
-        variant="contained"
-        fullWidth
-        sx={{ mt: 3, mb: 2 }}
-      >
-        {textButton}
-      </Button>
-      <Grid container>
-        <Grid item xs={8} textAlign="end">
-          {mode === 'signin' ? (
-            <Typography variant="body2">
-              <Link style={{ color: 'inherit' }} to="/signup">
+        {mode === 'signup' ? (
+          <TextField
+            error={errorRepassword}
+            helperText={
+              errorRepassword ? 'As senhas não coincidem' : ''
+            }
+            value={repassword}
+            onChange={(ev) => setRepassword(ev.target.value)}
+            margin="normal"
+            variant="outlined"
+            type="password"
+            required
+            id="repassword"
+            label="Repetir Senha"
+            fullWidth
+          />
+        ) : ''}
+
+        <Button
+          disabled={disabled}
+          type="submit"
+          variant="contained"
+          fullWidth
+          sx={{ mt: 3, mb: 2 }}
+        >
+          {textButton}
+        </Button>
+        <Grid container>
+          <Grid item xs={8} textAlign="end">
+            {mode === 'signin' ? (
+              <Typography variant="body2">
+                <Link style={{ color: 'inherit' }} to="/signup">
                             Não tem uma conta? Cadastre-se
-              </Link>
-            </Typography>
-          ) : (
-            <Typography variant="body2">
-              <Link style={{ color: 'inherit' }} to="/signin">
+                </Link>
+              </Typography>
+            ) : (
+              <Typography variant="body2">
+                <Link style={{ color: 'inherit' }} to="/">
                             Já possui conta? Vá para Login
-              </Link>
-            </Typography>
-          )}
+                </Link>
+              </Typography>
+            )}
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </Box>
   );
 };

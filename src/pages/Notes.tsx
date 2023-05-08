@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Grid,Box } from '@mui/material';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Grid,Box, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
@@ -16,11 +16,10 @@ import Divider from '@mui/material/Divider';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ModalInputs from '../components/ModalAdd';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { updateTask } from '../store/modules/UserLoggedSlice';
+import { deleteTask, updateTask } from '../store/modules/UserLoggedSlice';
 import TTask from '../types/TypeTask';
 import ModalEdit from '../components/ModalEdit';
-
-
+import { useNavigate } from 'react-router-dom';
 
 
 const Notes: React.FC = () => {
@@ -31,14 +30,21 @@ const Notes: React.FC = () => {
   const [task, setTask] = useState({} as TTask);
   const listFavorites = listTaks.filter((item) => item.favorite === true);
   const [openEdit, setOpenEdit] = React.useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<TTask | null>(null);
+  const navigate = useNavigate();
+  const userLogged = useAppSelector(state => state.userLogged.userLogged.email);
+
+  useEffect(() => {
+    if (!userLogged) {
+      navigate('/');
+    }
+  }, []);
 
   function page(){
     setFavorite(!favorite);
   }
-  /*  const openRemoveModal = useCallback(() => {
-    setOpenConfirm(true);
-  }, []); */
-
+  
   const handleClose = () => {
     setOpenAdd(false);
     setOpenEdit(false);
@@ -68,6 +74,24 @@ const Notes: React.FC = () => {
     }
   };
 
+  const handleDeleteCancel = () => {
+    setSelectedTask(null);
+    setDeleteConfirmOpen(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedTask) {
+      dispatch(deleteTask(selectedTask.id));
+      setDeleteConfirmOpen(false);
+      setSelectedTask(null);
+    }
+  };
+
+  const handleDelete = (item: TTask) => {
+    setSelectedTask(item);
+    setDeleteConfirmOpen(true);
+  };
+
   
   return (
     <Grid container height={'100vh'} display= 'flex' justifyContent='center'>
@@ -84,10 +108,10 @@ const Notes: React.FC = () => {
                       edge="end"
                       aria-label="edit"
                       sx={{ m: 1 }}
-                      onClick={() => openModalEdit(Task)}>
-                      <ModeEditIcon />
+                      onClick={() => openModalEdit(Task)} >
+                      <ModeEditIcon color='secondary'/>
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton onClick={() => handleDelete(Task)} edge="end" aria-label="delete" color='secondary'>
                       <DeleteIcon/>
                     </IconButton>
                   </>
@@ -116,7 +140,7 @@ const Notes: React.FC = () => {
                     >
                       <ModeEditIcon />
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton edge="end" onClick={() => handleDelete(Task)} aria-label="delete">
                       <DeleteIcon/>
                     </IconButton>
                   </>
@@ -143,9 +167,9 @@ const Notes: React.FC = () => {
           bottom: '20px',
         }}
         variant="h5"
-      >{favorite? <><Typography> <IconButton onClick={page}>
+      >{favorite? <><Typography> <IconButton color='primary' onClick={page}>
           <ArrowBackIosNewIcon/>
-        </IconButton>Todos os recados</Typography></> : <><Typography>Favoritos<IconButton onClick={page}>
+        </IconButton>Todos os recados</Typography></> : <><Typography>Favoritos<IconButton color='primary' onClick={page}>
           <ArrowForwardIosIcon />
         </IconButton></Typography></> }
       </Typography>
@@ -157,7 +181,7 @@ const Notes: React.FC = () => {
           position: 'absolute',
           right: '20px',
           bottom: '20px',
-          bgcolor: '#222',
+          bgcolor: '#C891B4',
         }}
       >
         <AddIcon />
@@ -173,6 +197,16 @@ const Notes: React.FC = () => {
         actionCancel={handleClose}
         actionConfirm={actionConfirm}
       ></ModalEdit>)}
+      <Dialog open={deleteConfirmOpen} onClose={handleDeleteCancel}>
+        <DialogTitle>Confirmar exclusão</DialogTitle>
+        <DialogContent>Tem certeza que deseja excluir o recado {selectedTask?.title}?</DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel}>Cancelar</Button>
+          <Button onClick={handleDeleteConfirm} color="error">
+                                Excluir
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 };

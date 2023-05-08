@@ -7,7 +7,7 @@ const defaultTheme = createTheme({
       contrastText: '#fff',
     },
     secondary: {
-      main: '#2a3759',
+      main: '#acc69b',
     },
   },
 });
