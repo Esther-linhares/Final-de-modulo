@@ -11,7 +11,7 @@ import TTask from '../types/TypeTask';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { updateUser } from '../store/modules/UsersSlice';
 import { addNewTask } from '../store/modules/UserLoggedSlice';
-import { title } from 'process';
+
 
 
 interface ModalInputsProps {
@@ -21,9 +21,7 @@ interface ModalInputsProps {
 }
 
 const ModalInputs: React.FC<ModalInputsProps> = ({ openModal, actionCancel, actionConfirm }) => {
-  /* const [descriptionTask, setDescriptionTask] = useState<string>('');
-  const [titleTask, setTitleTask] = useState<string>('');
-   */const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const[task, setTask] = React.useState({} as TTask);
   const userLogged = useAppSelector(state => state.userLogged.userLogged);
 
@@ -86,7 +84,7 @@ const ModalInputs: React.FC<ModalInputsProps> = ({ openModal, actionCancel, acti
             label="Descrição do recado"
             type={'text'}
             fullWidth
-            name="descripition"
+            name="description"
             onChange={handleChange}
             value={task.description}
             variant="standard"
