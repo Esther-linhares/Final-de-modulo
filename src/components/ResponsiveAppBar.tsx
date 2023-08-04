@@ -1,4 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
+import { Grid } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -45,85 +46,54 @@ const ResponsiveAppBar: React.FC = () => {
     <AppBar position="static" sx={{ backgroundColor: 'primary' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left'
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' }
-              }}
-            >
-              <MenuItem onClick={() => handleCloseNavMenu('/notes')}>
-                <Typography textAlign="center">Recados</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-          <Typography
-            variant="body1"
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', sm: 'flex', alignSelf: 'center' },
-              color: 'inherit',
-              textDecoration: 'none'
-            }}
-          >
-            Bem vindo(a)
-          </Typography>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  sx={{ color: '#638566', bgcolor: '#acc69b' }}
-                  /* alt={userLogged.toUpperCase()} */ src="/static/images/avatar/2.jpg"
-                />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleClose}
-            >
-              
-              <MenuItem key={setting}>
-                <Typography onClick={handleCloseUserMenu} textAlign="center">
-                  {setting}
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+          <Grid container display={'flex'} width={'100%'} height={'100%'} justifyContent={'space-around'} alignItems={'center'}>
+            <Grid item>
+              <Typography
+                variant="h5"
+                component="a"
+                sx={{
+                  mr: 2,
+                  display: { xs: 'none', sm: 'flex', alignSelf: 'center' },
+                  color: 'inherit',
+                  textDecoration: 'none'
+                }}>
+              Notas
+              </Typography>
+            </Grid>
+            <Grid item>
+            </Grid>
+            <Grid item>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar sx={{ color: '#638566', bgcolor: '#acc69b' }} src="/static/images/avatar/2.jpg" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleClose}
+                >
+                  <MenuItem key={setting}>
+                    <Typography onClick={handleCloseUserMenu} textAlign="center">
+                      {setting}
+                    </Typography>
+                  </MenuItem>;
+                </Menu>
+              </Box>
+            </Grid>
+          </Grid>
         </Toolbar>
       </Container>
     </AppBar>
