@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid,Box, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
@@ -28,7 +28,7 @@ const Notes: React.FC = () => {
   const listTaks = useAppSelector(state => state.userLogged.userLogged.tasks);
   const dispatch = useAppDispatch();
   const [task, setTask] = useState({} as TTask);
-  const listFavorites = listTaks.filter((item) => item.favorite === true);
+  const listFavorites = listTaks ? listTaks.filter((item) => item.favorite === true) : [];
   const [openEdit, setOpenEdit] = React.useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<TTask | null>(null);

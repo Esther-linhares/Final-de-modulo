@@ -11,7 +11,8 @@ import TTask from '../types/TypeTask';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { updateUser } from '../store/modules/UsersSlice';
 import { updateTask } from '../store/modules/UserLoggedSlice';
-import { title } from 'process';
+import AlertComponent from './Alert';
+
 
 
 interface ModalEditProps {
@@ -22,11 +23,10 @@ interface ModalEditProps {
 }
 
 const ModalEdit: React.FC<ModalEditProps> = ({ taskEdit, openModal, actionCancel, actionConfirm }) => {
-
+  const [showAlert, setShowAlert] = useState({ success: false, text: '', display: 'none' });
   const dispatch = useAppDispatch();
   const[editTask, setEditTask] = React.useState(taskEdit);
   const userLogged = useAppSelector(state => state.userLogged.userLogged);
-  const listTasks = useAppSelector(state => state.userLogged.userLogged.tasks);
 
 
   useEffect(() =>{
@@ -38,14 +38,29 @@ const ModalEdit: React.FC<ModalEditProps> = ({ taskEdit, openModal, actionCancel
   };
 
   const handleConfirm = () =>{
-    dispatch(
-      updateTask(editTask));
-    actionConfirm();
+    if(editTask.title !== null /* || editTask !== undefined  */){
+      console.log('ooie');
+      dispatch(
+        updateTask(editTask));
+      actionConfirm();
+    }else{
+      console.log('passou');
+      setShowAlert({
+        display: 'show',
+        success: false,
+        text: 'Título obrigatório!',
+      });
+      setTimeout(() => {
+        setShowAlert({ display: 'none', success: false, text: '' });
+      }, 1000);
+      return;
+    }
   };
 
   return (
     <Box>
       <Dialog open={openModal} onClose={handleClose}>
+        <AlertComponent success={showAlert.success} text={showAlert.text} display={showAlert.display} />
         <DialogTitle>Editar</DialogTitle>
         <DialogContent>
           <DialogContentText>{'Edite seu recado:'}</DialogContentText>

@@ -8,7 +8,7 @@ interface AlertComponentProps {
 }
 
 const AlertComponent: React.FC<AlertComponentProps> = ({ text, success, display }) => (
-  <Alert
+  <Alert 
     sx={{
       display,
       position: 'absolute',

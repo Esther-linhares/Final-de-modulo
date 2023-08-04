@@ -11,6 +11,7 @@ import TTask from '../types/TypeTask';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { updateUser } from '../store/modules/UsersSlice';
 import { addNewTask } from '../store/modules/UserLoggedSlice';
+import AlertComponent from './Alert';
 
 interface ModalInputsProps {
     openModal: boolean;
@@ -22,6 +23,7 @@ const ModalInputs: React.FC<ModalInputsProps> = ({ openModal, actionCancel, acti
   const dispatch = useAppDispatch();
   const[task, setTask] = React.useState({} as TTask);
   const userLogged = useAppSelector(state => state.userLogged.userLogged);
+  const [showAlert, setShowAlert] = useState({ success: false, text: '', display: 'none' });
 
 
   useEffect(() =>{
@@ -30,6 +32,12 @@ const ModalInputs: React.FC<ModalInputsProps> = ({ openModal, actionCancel, acti
   
   const handleClose = () => {
     actionCancel();
+    setTask({
+      id: 0,
+      title: '',
+      description:'',
+      favorite: false
+    });
   };
 
   const handleChange = (ev: { target: { name: string; value: string } }) => {
@@ -37,19 +45,39 @@ const ModalInputs: React.FC<ModalInputsProps> = ({ openModal, actionCancel, acti
   };
 
   const handleConfirm = () =>{
-    dispatch(
-      addNewTask({
-        ...task,
-        id: Date.now(),
-        favorite: false
-      })
-    );
+    if(task.title != null){
+      dispatch(
+        addNewTask({
+          ...task,
+          id: Date.now(),
+          favorite: false
+        })
+      );
+    }else {
+      setShowAlert({
+        display: 'show',
+        success: false,
+        text: 'Título obrigatório!',
+      });
+      setTimeout(() => {
+        setShowAlert({ display: 'none', success: false, text: '' });
+      }, 1000);
+      return;
+    }
+  
     actionConfirm();
+    setTask({
+      id: 0,
+      title: '',
+      description:'',
+      favorite: false
+    });
   };
 
   return (
     <Box>
       <Dialog open={openModal} onClose={handleClose}>
+        <AlertComponent success={showAlert.success} text={showAlert.text} display={showAlert.display} />
         <DialogTitle>Adicionar</DialogTitle>
         <DialogContent>
           <DialogContentText>{'Adicione seu recado:'}</DialogContentText>

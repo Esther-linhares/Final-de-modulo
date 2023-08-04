@@ -15,8 +15,8 @@ const SignUp: React.FC = () => {
         sx={{
           backgroundImage: 'url(/assets/img/notesImage.png)',
           backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repete',
+          backgroundSize: '70%',
+          backgroundRepeat: 'no-repeat',
         }}
       />
       <Grid item xs={12} sm={8} md={5}>
