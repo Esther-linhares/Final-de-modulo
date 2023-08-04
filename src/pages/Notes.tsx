@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
 const Notes: React.FC = () => {
   const [favorite, setFavorite] = useState(false);
   const [openAdd, setOpenAdd] = React.useState(false);
-  const listTaks = useAppSelector(state => state.userLogged.userLogged.tasks);
+  const listTaks = useAppSelector(state => state.userLogged.userLogged.tasks) || [];
   const dispatch = useAppDispatch();
   const [task, setTask] = useState({} as TTask);
   const listFavorites = listTaks ? listTaks.filter((item) => item.favorite === true) : [];
@@ -99,7 +99,7 @@ const Notes: React.FC = () => {
         <Box height='100%' paddingX={4} bgcolor='#f6f6f6'>
           <Typography paddingY={2} variant='h4'>{favorite? 'Recados Favoritos' : 'Todos os recados'}</Typography>
           <Grid item>
-            {favorite? listFavorites.map((Task) => (
+            {favorite? listFavorites?.map((Task) => (
               <Grid item key={Task?.id}>
                 <Divider />
                 <ListItem secondaryAction={
@@ -127,7 +127,7 @@ const Notes: React.FC = () => {
                   />
                 </ListItem>
               </Grid>
-            ))  : listTaks.map((Task) => (
+            ))  : listTaks?.map((Task) => (
               <Grid item key={Task?.id}>
                 <Divider />
                 <ListItem secondaryAction={
@@ -163,15 +163,25 @@ const Notes: React.FC = () => {
       <Typography
         sx={{
           position: 'absolute',
-
-          bottom: '20px',
+          bottom: '20px'
         }}
         variant="h5"
-      >{favorite? <><Typography> <IconButton color='primary' onClick={page}>
-          <ArrowBackIosNewIcon/>
-        </IconButton>Todos os recados</Typography></> : <><Typography>Favoritos<IconButton color='primary' onClick={page}>
-          <ArrowForwardIosIcon />
-        </IconButton></Typography></> }
+      >
+        {favorite ? (
+          <Grid item display={'flex'} justifyContent={'center'} alignItems={'center'}>
+            <IconButton color="primary" onClick={page}>
+              <ArrowBackIosNewIcon />
+            </IconButton>
+            <Typography>Todos os recados</Typography>
+          </Grid>
+        ) : (
+          <Grid item display={'flex'} justifyContent={'center'} alignItems={'center'}>
+            <Typography>Arquivados</Typography>
+            <IconButton color="primary" onClick={page}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </Grid>
+        )}
       </Typography>
       <Fab
         onClick={openModalImput}

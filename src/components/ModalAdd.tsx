@@ -44,8 +44,9 @@ const ModalInputs: React.FC<ModalInputsProps> = ({ openModal, actionCancel, acti
     setTask(state => ({ ...state, [ev.target.name]: ev.target.value }));
   };
 
+  
   const handleConfirm = () =>{
-    if(task.title != null){
+    if(task.title != null || task.title != ''){
       dispatch(
         addNewTask({
           ...task,
